@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
@@ -26,7 +26,7 @@ const Login = () => {
       if (user) {
         // Store user data in localStorage (optional)
         localStorage.setItem("user", JSON.stringify(user));
-
+        setIsLoggedIn(true);
         // Redirect user based on role
         if (user.role === "admin") {
           navigate("/admin");

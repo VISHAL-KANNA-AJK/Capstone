@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const Dashboard = ({ isLoggedIn }) => {
   const [scrumTeams, setScrumTeams] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedScrum, setSelectedScrum] = useState(null);
-
+  const navigate = useNavigate();
   // Fetch Scrum Teams, Tasks, and Users
   useEffect(() => {
     fetch("http://localhost:3000/scrums")
@@ -26,6 +27,11 @@ const Dashboard = () => {
 
   // Handle Scrum Selection
   const handleGetDetails = (scrumId) => {
+    if (!localStorage.getItem("user")) {
+      // Redirect to login if the user is not logged in
+      navigate("/login");
+      return;
+    }
     const selected = scrumTeams.find((team) => team.id === scrumId);
     setSelectedScrum(selected);
   };
@@ -82,7 +88,7 @@ const Dashboard = () => {
               assignedUser && (
                 <div key={task.id} className="mt-2 p-2 border bg-white">
                   <p><ul>
-                   <li> <strong>{assignedUser.name}</strong> ({assignedUser.email})</li>
+                   <li> {assignedUser.name} ({assignedUser.email})</li>
                     </ul>
                   </p>
                 </div>

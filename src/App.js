@@ -21,7 +21,7 @@ const App = () => {
     <Router>
       <Nav isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
-        <Route path="/" element={<WelcomePage isLoggedIn={isLoggedIn} />} />
+        <Route path="/" element={<Dashboard isLoggedIn={isLoggedIn} />} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn}/>} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<ProtectedRoute component={<Dashboard />} />} />
@@ -64,28 +64,6 @@ const Nav = ({ isLoggedIn, setIsLoggedIn }) => {
     
   );
   
-};
-const WelcomePage = () => {
-  const teams = ["Scrum Team A", "Scrum Team B", "Scrum Team C"];
-
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Scrum Teams</h1>
-      <ul className="mt-4">
-        {teams.map((team, index) => (
-          <li key={index} className="flex justify-between border p-2 mt-2">
-            {team}
-            <button 
-              onClick={() => (window.location.href = "/login")} 
-              className="bg-blue-500 text-white px-2 py-1 rounded"
-            >
-              Get Details
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 };
 
 const ProtectedRoute = ({ component }) => {
