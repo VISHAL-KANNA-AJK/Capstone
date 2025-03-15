@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-
+import { useUserContext } from '../../context/UserContext';
 const UserProfile = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useUserContext();
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -14,21 +14,21 @@ const UserProfile = () => {
   }, [user]);
 
   if (!user) return <p>Please log in.</p>;
-    return (
-        <div className="max-w-4xl mx-auto mt-10 p-5 border rounded shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Tasks Worked By {user.name}</h2>
+  return (
+    <div >
+      <h2 >Tasks Worked By {user.name}</h2>
 
       <ul className="space-y-3">
         {tasks.map((task) => (
-          <li key={task.id} className="border p-2 rounded">
+          <li key={task.id} >
             <p><strong>Title:</strong> {task.title}</p>
             <p><strong>Description:</strong> {task.description}</p>
             <p><strong>Status:</strong> {task.status}</p>
           </li>
         ))}
       </ul>
-    </div> 
-    );
+    </div>
+  );
 };
 
 export default UserProfile;

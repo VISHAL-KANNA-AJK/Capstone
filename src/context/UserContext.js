@@ -1,22 +1,38 @@
-import React, { createContext, useState, useEffect } from "react";
+// src/context/UserContext.js
 
-// Create the UserContext
-export const UserContext = createContext();
+import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Create the UserProvider component to wrap around your app
+// Create the context
+const UserContext = createContext();
+
+// Custom hook to use the user context
+export const useUserContext = () => {
+  return useContext(UserContext);
+};
+
+// Context provider component
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check if the user is already logged in from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser)); // Set user from localStorage if exists
+      setUser(JSON.parse(storedUser));  // Set user from localStorage
     }
   }, []);
 
+  const login = (user) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, login, logout }}>
       {children}
     </UserContext.Provider>
   );

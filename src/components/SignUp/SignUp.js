@@ -2,10 +2,11 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from '../../context/UserContext';
 
 const SignUp = () => {
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
+  const { setUser } = useUserContext();
   // Validation schema using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -29,6 +30,9 @@ const SignUp = () => {
       });
 
       if (response.ok) {
+        const user = await response.json();
+        setUser(user); // Update the user context with the newly registered user
+        localStorage.setItem("user", JSON.stringify(user));
         navigate("/login"); // Redirect to login page after signup
       } else {
         console.error("Sign-up failed");
@@ -37,8 +41,8 @@ const SignUp = () => {
       console.error("Error signing up:", err);
     }
   };
-    return (
-        <div>
+  return (
+    <div>
       <h2>Sign Up</h2>
 
       <Formik
@@ -50,7 +54,7 @@ const SignUp = () => {
           <Form>
             <div>
               <label >Name:</label>
-              <Field type="text" name="name"/>
+              <Field type="text" name="name" />
               <ErrorMessage name="name" component="div" />
 
               <label >Email:</label>
@@ -58,22 +62,22 @@ const SignUp = () => {
               <ErrorMessage name="email" component="div" />
 
               <label >Password:</label>
-              <Field type="password" name="password"  />
+              <Field type="password" name="password" />
               <ErrorMessage name="password" component="div" />
-            
 
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Signing up..." : "Sign Up"}
-            </button>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Signing up..." : "Sign Up"}
+              </button>
             </div>
           </Form>
         )}
       </Formik>
     </div>
-    );
+  );
 };
 
 export default SignUp;

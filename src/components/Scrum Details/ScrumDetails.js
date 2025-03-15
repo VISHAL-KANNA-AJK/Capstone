@@ -1,10 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useNavigate } from 'react';
 import { useParams } from "react-router-dom";
-
+import { useUserContext } from '../../context/UserContext';
 const ScrumDetails = () => {
-    const { id } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useUserContext();
   const [tasks, setTasks] = useState([]);
   const [scrumName, setScrumName] = useState("");
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     // Fetch Scrum Team Name
@@ -22,22 +30,22 @@ const ScrumDetails = () => {
 
   if (!scrumName) return <p>Loading...</p>;
 
-    return (
-        <div className="max-w-4xl mx-auto mt-10 p-5 border rounded shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Scrum Details for {scrumName}</h2>
+  return (
+    <div >
+      <h2 >Scrum Details for {scrumName}</h2>
 
-      <h3 className="text-lg font-semibold">Tasks</h3>
-      <ul className="space-y-3 mb-4">
+      <h3 >Tasks</h3>
+      <ul >
         {tasks.map((task) => (
-          <li key={task.id} className="border p-2 rounded">
+          <li key={task.id} >
             <p><strong>Task Name:</strong> {task.title}</p>
             <p><strong>Description:</strong> {task.description}</p>
             <p><strong>Status:</strong> {task.status}</p>
           </li>
         ))}
       </ul>
-      </div>
-    );
+    </div>
+  );
 };
 
 export default ScrumDetails;
